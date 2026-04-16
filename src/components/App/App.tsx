@@ -39,7 +39,7 @@ export default function App() {
   return (
     <>
       <SearchBar onSubmit={handleSubmit} />
-      {isFetching && <Loader />}
+      {isFetching && query !== "" && <Loader />}
       {isError && <ErrorMessage />}
       {movies.length > 0 && isSuccess && (
         <MovieGrid
@@ -49,9 +49,9 @@ export default function App() {
       )}
       {totalPages > 1 && (
         <ReactPaginate
-          onChange={setPage}
+          onPageChange={setPage}
           totalPages={totalPages}
-          pageCount={page}
+          currentPage={page}
         />
       )}
       {selectedMovie && (
