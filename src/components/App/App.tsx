@@ -14,7 +14,7 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const { data, isError, isLoading } = useQuery({
+  const { data, isError, isSuccess, isFetching } = useQuery({
     queryKey: ["film", query, page],
     queryFn: async () => await fetchMovies(query, page),
     enabled: query !== "",
@@ -29,7 +29,6 @@ export default function App() {
   const movies = data?.results ?? [];
 
   const totalPages = data?.total_pages ?? 0;
-  console.log(totalPages);
 
   useEffect(() => {
     if (data && data.results.length <= 0) {
@@ -40,16 +39,20 @@ export default function App() {
   return (
     <>
       <SearchBar onSubmit={handleSubmit} />
-      {isLoading && <Loader />}
+      {isFetching && <Loader />}
       {isError && <ErrorMessage />}
-      {movies.length > 0 && (
+      {movies.length > 0 && isSuccess && (
         <MovieGrid
           onSelect={(movie) => setSelectedMovie(movie)}
           movies={movies}
         />
       )}
       {totalPages > 1 && (
-        <ReactPaginate onChange={setPage} totalPages={totalPages} page={page} />
+        <ReactPaginate
+          onChange={setPage}
+          totalPages={totalPages}
+          pageCount={page}
+        />
       )}
       {selectedMovie && (
         <MovieModal
