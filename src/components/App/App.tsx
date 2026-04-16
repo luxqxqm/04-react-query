@@ -50,8 +50,8 @@ export default function App() {
       {totalPages > 1 && (
         <ReactPaginate
           onPageChange={setPage}
-          totalPages={totalPages}
-          currentPage={page}
+          pageCount={totalPages}
+          forcePage={page}
         />
       )}
       {selectedMovie && (
